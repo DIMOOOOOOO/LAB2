@@ -21,11 +21,11 @@ void cal_num_if_else(int level_order); //Find and evaluate the number of 'if_els
 int main()
 {
 	char File_Path[1000] = {'\0'};
-	int level;
+	int level_order;
 	cout<<"Please enter the File_Path: ";
 	cin.getline(File_Path,1000); //Read line by line
 	cout<<"Please enter the order of level: ";
-	cin >> level;
+	cin >> level_order;
 	
 	fstream infile; 
 	infile.open (File_Path);
@@ -48,14 +48,14 @@ int main()
 	//Introduce keyword statistics functions
 	cal_num_keywords();
 	
-	if (level > 1)
+	if (level_order > 1)
 	{
 	 	//Introduces the function that find switch-case structures.
 		cal_num_switch_case();
-		if (level > 2)
+		if (level_order > 2)
 		{
 			//Introduce a function that finds the number of if-else structures
-			cal_num_if_else(level);
+			cal_num_if_else(level_order);
 		}  
 	}
 	infile.close();  
