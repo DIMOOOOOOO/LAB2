@@ -1,0 +1,206 @@
+#include<iostream>
+#include<string>
+#include<fstream>
+using namespace std;
+
+string str;
+string key_words[32] =
+{
+	"auto","break","case","char","const","continue","default","do ",
+	"double","else","enum","extern","float","for","goto","if","int",
+	"long","register","return","short","signed","sizeof","stastic",
+	"struct","switch","typedef","union","unsigned","void","volatile","while"
+};//A total of 32 keywords are defined in C++.
+
+//Function declaration
+void File_Process(); //Preprocessing the inspection text.
+void cal_num_keywords(); //Find and evaluate the  total number of keywords in the inspection text.
+void cal_num_switch_case(); //Find and evaluate the number of 'switch_case' structure in the inspection text.
+void cal_num_if_else(int level_order); //Find and evaluate the number of 'if_else' structure in the inspection text.
+
+int main()
+{
+	//int count = 0;
+	char File_Path[1000] = {'\0'};
+	int level_order;
+	cout<<"Please enter the File_Path: ";
+	cin.getline(File_Path,1000); //Read line by line
+	cout<<"Please enter the order of level: ";
+	cin >> level_order;
+	
+	fstream infile; 
+	infile.open (File_Path);
+	if(infile.fail())//is_open returns a Boolean type to determine whether it opened successfully
+	{
+		cout<<"File opening failure"<<endl;
+		return 0;
+	}
+	
+	string txt_temp;
+	while ( infile.good() )
+	{
+		getline(infile,txt_temp);		
+		str = str + txt_temp + '\n';
+	}
+	
+	//Introducing preprocessor functions
+	File_Process();
+	
+	//Introduce keyword statistics functions
+	cal_num_keywords();
+	
+	if (level_order > 1)
+	{
+	 	//Introduces the function that find switch-case structures.
+		cal_num_switch_case();
+		if (level_order > 2)
+		{
+			//Introduce a function that finds the number of if-else structures
+			cal_num_if_else(level_order);
+		}  
+	}
+	infile.close();  
+	return 0;
+}
+
+void File_Process()
+{
+	for (int i=0,j=i; i<(int)str.length(); i++ )
+	{
+		if (str[i]=='/' && str[i+1]=='/' )
+		{
+			j = i;
+			while ( str[j] != '\n' )
+			{
+				j ++;
+			}
+			str.erase(i,j-i+1);
+		}
+		if (str[i]=='/' && str[i+1]=='*' )
+		{
+			j = i + 2;
+			while ( str[j] != '*' )
+			{
+				j ++;
+			}
+			str.erase(i,j+2-i);
+		}
+		if ( str[i]=='"')
+		{
+			j = i+1;
+			while (str[j] != '"' )
+			{
+				j ++;
+			}
+			str.erase(i,j-i+1);
+		}
+	}
+}
+////Delete the comment part of the file and process the  inspection file.
+
+void cal_num_keywords()
+{
+	int total_num=0;
+	for (int i=0;i<32;i++)
+	{
+		int count = 0;
+		size_t keyword_position = str.find(key_words[i]);
+		while ( keyword_position != str.npos )
+		{
+			count ++;
+			keyword_position = str.find(key_words[i],keyword_position+1);
+		}
+		total_num += count;
+	}
+	printf ("total num: %d\n",total_num);	
+}
+//Check the keyword table to find the number of keywords in the inspection file and return it.
+
+void cal_num_switch_case()
+{
+ 	size_t switch_position = str.find(key_words[25]); 
+	size_t case_position;
+	int switch_num = 0;
+	int case_num[1000] = {0};
+	while ( switch_position != str.npos )
+	{
+		switch_num ++;
+		case_position = str.find(key_words[2],switch_position);
+		while ( case_position != str.npos )
+		{
+			case_num[switch_num-1] ++;
+			case_position = str.find(key_words[2],case_position+1);
+		}
+		switch_position = str.find(key_words[25],switch_position+1);
+	}
+	for (int i=0;i < switch_num-1;i++ )
+	{
+		case_num[i] -= case_num[i+1];
+	}
+	cout << "switch num: " << switch_num << endl;
+	cout << "case num: ";
+	for ( int i=0; i<switch_num; i++)
+	{
+		cout << case_num[i] << " ";
+	}
+	cout << endl;
+} 
+//Find several groups of switch-case structures in the inspection text and print them.
+
+void cal_num_if_else(int level_order)
+{
+	int cal[1000] = {0};
+	int pos = 0;    
+	int if_else = 0;
+	int if_elseif_else = 0;
+	size_t if_position = str.find(key_words[15]);
+	if (if_position != str.npos )
+	{
+		cal[pos] = 1;
+		pos ++;
+		for ( int i = if_position+1; i < (int)str.length(); i++ )
+		{
+			if (str.compare(i,7,"else if") == 0)
+			{
+				cal[pos] = 2;
+				pos ++;
+				i += 7;
+			}
+			else if (str.compare(i,2,"if") == 0 )
+			{
+				cal[pos] = 1;
+				pos ++;
+				i += 2;
+			}
+			else if (str.compare(i,4,"else") == 0)
+			{
+				int j = pos-1;
+				if (cal[j] != 1 && cal[j] == 2)
+				{
+					while (cal[j] != 1)
+					{
+						j--;
+					}
+					int pos_1 = j;
+					for (j; j<pos; j++)
+					{
+						cal[j] = 0;
+					}
+					pos = pos_1;
+					if_elseif_else ++;
+				}
+				else if (cal[j] == 1)
+				{
+					if_else ++;
+					cal[j] = 0;
+					pos = j;
+				}
+				i += 4;				
+			}
+
+		}
+	}
+	if (level_order >= 3) cout << "if-else num: " << if_else << endl;
+	if (level_order == 4)	cout << "if-'else if'-else num: " << if_elseif_else << endl;
+}
+//Find the number of if-else and if-elseif-else constructs in the inspection text.
