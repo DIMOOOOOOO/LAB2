@@ -28,7 +28,7 @@ int main()
 	cout<<"Please enter the order of level: ";
 	cin >> level_order;
 	
-	fstream infile; 
+	ifstream infile; 
 	infile.open (File_Path);
 	if(infile.fail())//is_open returns a Boolean type to determine whether it opened successfully
 	{
