@@ -13,7 +13,7 @@ string key_words[32] =
 };//A total of 32 keywords are defined in C++.
 
 //Function declaration
-void File_Process(); //Preprocessing the inspection text.
+void File_Pretreatment(); //Preprocessing the inspection text.
 void cal_num_keywords(); //Find and evaluate the  total number of keywords in the inspection text.
 void cal_num_switch_case(); //Find and evaluate the number of 'switch_case' structure in the inspection text.
 void cal_num_if_else(int level_order); //Find and evaluate the number of 'if_else' structure in the inspection text.
@@ -44,7 +44,7 @@ int main()
 	}
 	
 	//Introducing preprocessor functions
-	File_Process();
+	File_Pretreatment();
 	
 	//Introduce keyword statistics functions
 	cal_num_keywords();
@@ -63,7 +63,7 @@ int main()
 	return 0;
 }
 
-void File_Process()
+void File_Pretreatment()
 {
 	for (int i=0,j=i; i<(int)str.length(); i++ )
 	{
