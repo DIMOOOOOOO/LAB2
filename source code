@@ -20,45 +20,48 @@ void cal_num_if_else(int level_order); //Find and evaluate the number of 'if_els
 
 int main()
 {
-	char File_Path[1000] = {'\0'};
+	char File_Path[1000] = { '\0' };
 	int level_order;
-	cout<<"Please enter the File_Path: ";
-	cin.getline(File_Path,1000); //Read line by line
-	cout<<"Please enter the order of level: ";
+	cout << "Please enter the File_Path: ";
+	cin.getline(File_Path, 1000); //Read line by line
+	cout << "Please enter the order of level: ";
 	cin >> level_order;
-	
-	ifstream infile; 
-	infile.open (File_Path);
-	if(infile.fail())//is_open returns a Boolean type to determine whether it opened successfully
+
+	ifstream infile;
+	infile.open(File_Path);
+	if (infile.fail())//is_open returns a Boolean type to determine whether it opened successfully
 	{
-		cout<<"File opening failure"<<endl;
+		cout << "File opening failure" << endl;
 		return 0;
 	}
-	
+
 	string txt_temp;
-	while ( infile.good() )
+	while (infile.good())
 	{
-		getline(infile,txt_temp);		
+		getline(infile, txt_temp);
 		str = str + txt_temp + '\n';
 	}
-	
+
 	//Introducing preprocessor functions
 	File_Pretreatment();
-	
+
 	//Introduce keyword statistics functions
-	cal_num_keywords();
-	
-	if (level_order > 1)
+	if (level_order < 5) {
+		cal_num_keywords();                   //Level 1:Calculate the total number of:keywords.
+	};
+	if (level_order > 1 && level_order <= 4)
 	{
-	 	//Introduces the function that find switch-case structures.
-		cal_num_switch_case();
-		if (level_order > 2)
+		//Introduces the function that find switch-case structures.
+		cal_num_switch_case();               //Level 2:Calculate the total number of:keywords;swith and case. 
+		if (level_order > 2 && level_order <= 4)
 		{
 			//Introduce a function that finds the number of if-else structures
-			cal_num_if_else(level_order);
-		}  
+			cal_num_if_else(level_order);    //Level 3:Calculate the number of:keywords;swith and case;if-else.
+		}                                    //Level 4:Calculate the number of:keywords;swith and case;if-else;if-else if-else.
 	}
-	infile.close();  
+	if (level_order >= 5)
+		cout << "Error.Please re-enter a true level." << endl;
+	infile.close();
 	return 0;
 }
 
