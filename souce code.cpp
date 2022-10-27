@@ -136,8 +136,8 @@ void cal_num_switch_case()
 	{
 		case_num[i] -= case_num[i+1];
 	}
-	cout << "switch num: " << switch_num << endl;
-	cout << "case num: ";
+	cout << "The switch num is: " << switch_num << endl;
+	cout << "The case num is: ";
 	for ( int i=0; i<switch_num; i++)
 	{
 		cout << case_num[i] << " ";
@@ -150,8 +150,8 @@ void cal_num_if_else(int level_order)
 {
 	int cal[1000] = {0};
 	int pos = 0;    
-	int if_else = 0;
-	int if_elseif_else = 0;
+	int if_else_num = 0;
+	int if_elseif_else_num = 0;
 	size_t if_position = str.find(key_words[15]);
 	if (if_position != str.npos )
 	{
@@ -186,11 +186,11 @@ void cal_num_if_else(int level_order)
 						cal[j] = 0;
 					}
 					pos = pos_1;
-					if_elseif_else ++;
+					if_elseif_else_num ++;
 				}
 				else if (cal[j] == 1)
 				{
-					if_else ++;
+					if_else_num ++;
 					cal[j] = 0;
 					pos = j;
 				}
@@ -199,7 +199,9 @@ void cal_num_if_else(int level_order)
 
 		}
 	}
-	if (level_order >= 3) cout << "if-else num: " << if_else << endl;
-	if (level_order == 4)	cout << "if-'else if'-else num: " << if_elseif_else << endl;
+	if (level_order >= 3) 
+		cout << "The if-else num is: " << if_else << endl;
+	if (level_order == 4)	
+		cout << "The if-'else if'-else num is: " << if_elseif_else << endl;
 }
 //Find the number of if-else and if-elseif-else constructs in the inspection text.
