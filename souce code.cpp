@@ -12,15 +12,14 @@ string key_words[32] =
 	"struct","switch","typedef","union","unsigned","void","volatile","while"
 };//A total of 32 keywords are defined in C++.
 
-//Function declaration
 void File_Pretreatment(); //Preprocessing the inspection text.
 void cal_num_keywords(); //Find and evaluate the  total number of keywords in the inspection text.
 void cal_num_switch_case(); //Find and evaluate the number of 'switch_case' structure in the inspection text.
 void cal_num_if_else(int level_order); //Find and evaluate the number of 'if_else' structure in the inspection text.
+//Function declaration
 
 int main()
 {
-	//int count = 0;
 	char File_Path[1000] = {'\0'};
 	int level_order;
 	cout<<"Please enter the File_Path: ";
@@ -47,17 +46,17 @@ int main()
 	File_Pretreatment();
 	
 	//Introduce keyword statistics functions
-	cal_num_keywords();
+	cal_num_keywords();                          //Level 1:Calculate the total number of:keywords.
 	
 	if (level_order > 1)
 	{
 	 	//Introduces the function that find switch-case structures.
-		cal_num_switch_case();
+		cal_num_switch_case();               //Level 2:Calculate the total number of:keywords;swith and case. 
 		if (level_order > 2)
 		{
 			//Introduce a function that finds the number of if-else structures
-			cal_num_if_else(level_order);
-		}  
+			cal_num_if_else(level_order);//Level 3:Calculate the number of:keywords;swith and case;if-else.
+		}                                    //Level 4:Calculate the number of:keywords;swith and case;if-else;if-else if-else.
 	}
 	infile.close();  
 	return 0;
@@ -96,7 +95,7 @@ void File_Pretreatment()
 		}
 	}
 }
-////Delete the comment part of the file and process the  inspection file.
+////Delete the comment part of the file.
 
 void cal_num_keywords()
 {
